@@ -1,0 +1,48 @@
+name:                lunch-and-learn
+version:             0.1.0.0
+github:              "ebergq/lunch-and-learn"
+license:             BSD3
+author:              "Eric Bergquist"
+maintainer:          "eric.c.bergquist@gmail.com"
+copyright:           "Eric Bergquist"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on Github at <https://github.com/ebergq/lunch-and-learn#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+
+executables:
+  lunch-and-learn-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - lunch-and-learn
+
+tests:
+  lunch-and-learn-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - lunch-and-learn
