@@ -1,6 +1,7 @@
 module Main where
 
-import Lib
+import Polymorphism
 
 main :: IO ()
-main = someFunc
+main = undefined
+
