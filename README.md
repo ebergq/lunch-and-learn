@@ -9,7 +9,7 @@ Table of Contents
 * [Introduction](#introduction)
   * [Why use purely functional languages?](#why-use-purely-functional-languages)
   * [Why learn more advanced topics in functional programming?](#why-learn-more-advanced-topics-in-functional-programming)
-* [Parametric polymorphism](#parametric-polymorphism)
+* [Parametric Polymorphism](#parametric-polymorphism)
   * [What is parametric polymorphism?](#what-is-parametric-polymorphism)
   * [Canonical example](#canonical-example)
   * [More examples](#more-examples)
@@ -36,16 +36,16 @@ Introduction
  - Concurrent/Parallell programming
  - Terse, easier to solve problems with less code
 
-Functional programming is like LEGO. Using type signatures you can build programs by composing functions without implementing the actual functions. And who doesn't like LEGO?
+Functional programming is like Lego. Using type signatures you can build programs by composing functions without implementing the actual functions. And who doesn't like Lego?
 
 ##### Why learn more advanced topics in functional programming?
-For the same reason why you should learn SOLID principles in Object Oriented programming. Knowledge about these concepts is needed to understand and build better architecture using functional programming. There are patterns in OO which are not easy to understand, like Adapter, Mediator, SOLID, Singleton, Visitor, etc.
+For the same reason why you should learn the SOLID principles in object-oriented programming. Knowledge about advanced concepts is needed to understand and build better architecture using functional programming. There are patterns in OOP which are not easy to understand, like Adapter, Mediator, SOLID, Singleton, Visitor, etc.
 
-Parametric polymorphism
+Parametric Polymorphism
 =======================
 
 ##### What is parametric polymorphism?
-A function working on many different types. One implementation to do a thing which can be re-used by many different types. Much more useful in languages where purity is enforced (Haskell, Elm, PureScript). The less we know about the type, the more we know about the implementation. The more we know about the type, the less we know about the implementation.
+A function working on many different types. One implementation to do a thing which can be re-used by many different types. Much more useful in languages where purity is enforced (**Haskell**, **Elm**, **PureScript**). The less we know about the type, the more we know about the implementation. The more we know about the type, the less we know about the implementation.
 
 ##### Canonical example
 
@@ -72,7 +72,7 @@ f2 x = ?
 public static int F2(int x) => ?;
 ```
 
-Over-specification is a problem. It's kind of like pre-mature optimization where you commit to specific type. The number of implementations of a function escalates very quickly which makes it very hard to reason about the code. *John A De Goes* touches this in his [blog](http://degoes.net/articles/insufficiently-polymorphic) on the subject.
+Over-specification is a problem. It's kind of like pre-mature optimization where you commit to a specific type. The number of implementations of a function escalates quickly which makes it hard to reason about the code. *John A De Goes* talks about this in his [blog](http://degoes.net/articles/insufficiently-polymorphic) on the subject.
 
 > Descriptive variable names are a code smell.
 > More precisely, if you can name your variables after more descriptive things than `f`, `a`, `b`, and so on, then your code is probably monomorphic.
@@ -120,7 +120,7 @@ maximum :: [Int] -> Int
 maximum xs = ?
 ```
 
-To be able to be sure this function behaves correctly we need two property based tests:
+To be able to be sure this function behaves correctly, we need two property-based tests:
 ```hs
 prop_MaximumResultInOriginalList :: [Int] -> Property
 prop_MaximumResultInOriginalList xs = xs /= [] ==> maximum xs `elem` xs
@@ -130,24 +130,24 @@ prop_MaximumAllElementsSmallerThanMaximum xs =
     xs /= [] ==> forAll (choose (0, length xs - 1)) $ \n -> maximum xs >= (xs !! n)
 ```
 
-What happens if we generalize `maximum` to the following:
+What happens if we generalize `maximum`?
 ```hs
 maximum :: Ord a => [a] -> a
 maximum xs = ?
 ```
 
-Now we know that if the function returns a result it must have come from the original list. This makes the property `prop_MaximumResultInOriginalList` unnecessary since we get this certainty by the type system at compile time. Another added benefit is that we can use `maximum` with any type which is an instance of the `Ord` type class. So, by generalizing functions like this one, we get a lot of added benefits and no drawbacks!
+Now we know that if the function returns a result it must have come from the original list. This makes the property `prop_MaximumResultInOriginalList` unnecessary since, we get this certainty by the type system at compile time. Another added benefit is that `maximum` can be used with any type that is an instance of the `Ord` type class. So, by generalizing functions like this one, we get a lot of added benefits and no drawbacks!
 
 ##### Different kinds of types
 
-So far we have touched on the following kinds of types (also visualized in the table below):
+So far we have touched on the following kinds of type (also visualized in the table below):
  - Concrete types
  - Polymorphic types
  - Concrete types parameterized by concrete types
  - Concrete types parameterized by polymorphic types
 
 | Type | Concrete examples | Polymorphic examples |
-| ------ | ------ | ------ |
+| ---- | ----------------- | -------------------- |
 | Simple type | `Int`, `Double`, `String` | `a`, `b`, `c` |
 | Container type | `[Int]`, `[a]`, `Map k v` | `?` |
 
@@ -165,21 +165,21 @@ f7 :: [a] -> [a]
 f7 xs = ?
 ```
 
-What about constraints? Constraints on the `a` in `f a` is interesting but constraints on the `f` is where we can utilize very powerful abstractions. Consider if we had the following constraint on the `f`:
+What about constraints? Constraints on the `a` in `f a` is interesting, but constraints on the `f` is where we can utilize very powerful abstractions. Consider if we had the following constraint on the `f`:
 ```hs
 f8 :: (a -> b) -> f a -> f b
 ```
 
-If we replace the `f` with `IEnumerable` it will look like this in C\#:
+If we replace the `f` with `IEnumerable`, it will look like this in **C\#**:
 ```cs
 public static IEnumerable<T2> F8<T1, T2>(this IEnumerable<T1> source, Func<T1, T2> f) => ?;
 ```
 
-This is `Select` in C\# and `map` (or `fmap` in Haskell) in other languages. This mapping function can now be implemented for different container types:
+This is `Select` in **C\#** and `map` (or `fmap` in **Haskell**) in other languages. This mapping function can be implemented for different container types:
 - `List.map :: (a -> b) -> [a] -> [b]`
 - `Maybe.map :: (a -> b) -> Maybe a -> Maybe b`
 
-This can also be implemented for container types with multiple type arguments if we partially apply all but one of the type arguments, for example:
+`map` can also be implemented for container types with multiple type arguments if we partially apply all but one of the type arguments, for example:
 - `Map.map :: (a -> b) -> Map k a -> Map k b`
 - `Tuple.map :: (b -> c) -> (a, b) -> (a, c)`
 
