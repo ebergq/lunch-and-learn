@@ -1,6 +1,32 @@
-# Lunch and Learn
+Lunch and Learn
+===============
 
 This is an attempt to teach some advanced functional programming principles using examples in Haskell. Much of the content is inspired by the excellent [LambdaCast](https://soundcloud.com/lambda-cast) podcast.
+
+Table of Contents
+=================
+
+* [Introduction](#introduction)
+  * [Why use purely functional languages?](#why-use-purely-functional-languages)
+  * [Why learn more advanced topics in functional programming?](#why-learn-more-advanced-topics-in-functional-programming)
+* [Parametric polymorphism](#parametric-polymorphism)
+  * [What is parametric polymorphism?](#what-is-parametric-polymorphism)
+  * [Canonical example](#canonical-example)
+  * [More examples](#more-examples)
+  * [The `maximum` function](#the-maximum-function)
+  * [Different kinds of types](#different-kinds-of-types)
+* [Monoids](#monoids)
+* [Functors](#functors)
+* [Applicative functors](#applicative-functors)
+* [Monads](#monads)
+* [Exercises](#exercises)
+  * [Install Stack](#install-stack)
+  * [Build](#build)
+  * [Run tests](#run-tests)
+* [References](#references)
+
+Introduction
+============
 
 ##### Why use purely functional languages?
  - Immutability
@@ -10,12 +36,13 @@ This is an attempt to teach some advanced functional programming principles usin
  - Concurrent/Parallell programming
  - Terse, easier to solve problems with less code
 
-Functional programming is like LEGO. Using type signatures you can build a whole program by composing functions without implementing the actual functions. And who doesn't like LEGO?
+Functional programming is like LEGO. Using type signatures you can build programs by composing functions without implementing the actual functions. And who doesn't like LEGO?
 
 ##### Why learn more advanced topics in functional programming?
 For the same reason why you should learn SOLID principles in Object Oriented programming. Knowledge about these concepts is needed to understand and build better architecture using functional programming. There are patterns in OO which are not easy to understand, like Adapter, Mediator, SOLID, Singleton, Visitor, etc.
 
-# Parametric polymorphism
+Parametric polymorphism
+=======================
 
 ##### What is parametric polymorphism?
 A function working on many different types. One implementation to do a thing which can be re-used by many different types. Much more useful in languages where purity is enforced (Haskell, Elm, PureScript). The less we know about the type, the more we know about the implementation. The more we know about the type, the less we know about the implementation.
@@ -109,7 +136,7 @@ maximum :: Ord a => [a] -> a
 maximum xs = ?
 ```
 
-Now we that if the function returns a result it must have come from the original list which makes the property `prop_MaximumResultInOriginalList` unnecessary at this point since we get this certainty by the type system at compile time. Another added benefit is that we can use `maximum` with any type which is an instance of the `Ord` type class. So, by generalizing functions like this one, we get a lot of added benefits and no drawbacks!
+Now we know that if the function returns a result it must have come from the original list. This makes the property `prop_MaximumResultInOriginalList` unnecessary since we get this certainty by the type system at compile time. Another added benefit is that we can use `maximum` with any type which is an instance of the `Ord` type class. So, by generalizing functions like this one, we get a lot of added benefits and no drawbacks!
 
 ##### Different kinds of types
 
@@ -160,19 +187,56 @@ We often call the higher-kinded type variable `f` or `m` because of the concepts
 
 What do we know about the mapping function? It the provided function is run it must be run on elements extracted from `f a` since we have no way of constructing values of type `a`.
 
-# Monoids
+Monoids
+=======
 
 TBC
 
-# Functors
+Functors
+========
 
 TBC
 
-# Applicative functors
+Applicative functors
+====================
 
 TBC
 
-# Monads
+Monads
+======
 
 TBC
 
+Exercises
+=========
+
+##### Install Stack
+
+This project is written as a Haskell project using [Stack](https://docs.haskellstack.org/). To install it, follow the installation instructions for your platform on the home page.
+
+##### Build
+
+To build the project use the following command:
+```sh
+$ stack build
+```
+
+##### Run tests
+
+To run the tests use the follow command:
+```sh
+$ stack test
+```
+
+To run specific tests or fixtures a filter can be used in the command:
+```sh
+$ stack test --test-arguments "-m <filter>"
+```
+
+References
+==========
+
+ * [LambdaCast](https://soundcloud.com/lambda-cast/)
+ * [Haskell home page](https://wiki.haskell.org/)
+ * [Learn You A Haskell](http://learnyouahaskell.com/)
+ * [Blog: John A De Goes](http://degoes.net/articles/)
