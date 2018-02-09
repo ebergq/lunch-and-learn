@@ -14,7 +14,7 @@ Table of Contents
   * [Canonical example](#canonical-example)
   * [More examples](#more-examples)
   * [The `maximum` function](#the-maximum-function)
-  * [Different kinds of types](#different-kinds-of-types)
+  * [Different kinds of type](#different-kinds-of-types)
 * [Monoids](#monoids)
 * [Functors](#functors)
 * [Applicative functors](#applicative-functors)
@@ -138,7 +138,7 @@ maximum xs = ?
 
 Now we know that if the function returns a result it must have come from the original list. This makes the property `prop_MaximumResultInOriginalList` unnecessary since, we get this certainty by the type system at compile time. Another added benefit is that `maximum` can be used with any type that is an instance of the `Ord` type class. So, by generalizing functions like this one, we get a lot of added benefits and no drawbacks!
 
-##### Different kinds of types
+##### Different kinds of type
 
 So far we have touched on the following kinds of type (also visualized in the table below):
  - Concrete types
