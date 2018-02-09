@@ -14,7 +14,7 @@ Table of Contents
   * [Canonical example](#canonical-example)
   * [More examples](#more-examples)
   * [The `maximum` function](#the-maximum-function)
-  * [Different kinds of type](#different-kinds-of-types)
+  * [Different kinds of type](#different-kinds-of-type)
 * [Monoids](#monoids)
 * [Functors](#functors)
 * [Applicative functors](#applicative-functors)
