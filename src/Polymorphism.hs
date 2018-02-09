@@ -2,7 +2,8 @@ module Polymorphism where
 
 {-
 Since many of these functions are standard functions which already exist
-':s are added to the name to distinguish from the original one.
+':s are added to the name to distinguish from the original one in Haskell's
+Prelude module.
 -}
 
 id' :: a -> a
@@ -12,7 +13,7 @@ fst' :: a -> b -> a
 fst' x y = undefined
 
 {-
-There is obvious solution to this but can you solve this using point-free
+There is an obvious solution to this but can you solve this using point-free
 notation?
 Hint: Use the following functions:
  - (.) :: (b -> c) -> (a -> b) -> a -> c
@@ -33,6 +34,7 @@ head' xs = undefined
 
 {-
 Implement a function which retrieves the last element in a list.
+Hint: Use pattern matching and recursion.
 -}
 last' :: [a] -> a
 last' xs = undefined
@@ -47,11 +49,21 @@ maximumMono (x:xs) = f x xs
 
 {-
 Implement the polymorphic version of maximum
-Hint: Use compare from the Ord type class
+Hint: Use maximumMono as starting and use compare from the
+Ord type class.
 -}
 maximumPoly :: Ord a => [a] -> a
 maximumPoly xs = undefined
 
+{-
+Implement higher-kinded identity.
+-}
 id'' :: f a -> f a
 id'' x = undefined
 
+{-
+Implement map for lists.
+Hint: Use pattern matching and recursion.
+-}
+map' :: (a -> b) -> [a] -> [b]
+map' f xs = undefined
