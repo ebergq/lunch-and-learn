@@ -205,7 +205,7 @@ class Monoid a where
   mconcat :: [a] -> a
   {-# MINIMAL mempty, mappend #-}
 ```
-Notice that there is function `mconcat` in there which does not have to be implemented. It is a convenience function for combining a list of elements into a single element.
+Notice that there is a function `mconcat` in there which does not have to be implemented. It is a convenience function for combining a list of elements into a single element.
 
 In **C\#** this can be implemented by an interface:
 ```cs
@@ -344,7 +344,135 @@ This is of course a boring example when only working with lists in-memory but wh
 Functors
 ========
 
-TBC
+#### Definition of Functor
+
+A Functor is a classification of types that have a mapping function, often called `map` (or `fmap` in **Haskell**).
+
+This is expressed by a type class in **Haskell**:
+```hs
+class  Functor f  where
+  fmap        :: (a -> b) -> f a -> f b
+  (<$)        :: a -> f b -> f a
+  {-# MINIMAL fmap #-}
+```
+Notice that there is an infix operator `(<$)` in there which does not have to be implemented. It replaces all values in the input with the same value. There are also other operators to which can work with a functor such as `($>) :: Functor f => a -> f b -> f a` and `(<$>) :: Functor f => (a -> b) -> f a -> f b`. `($>)` is the flipped version of `(<$)` and `(<$>)` is the infix version of `fmap`.
+
+Since **C\#** does not have higher-kinded types this can not be implemented for the general case but if it could it would probably look something along the lines of:
+```cs
+public interface Functor<F<A>>
+{
+    public F<B> Map<B>(Func<A, B>);
+}
+```
+
+However, there is a non-general implementation for `IEnumerable<T>` implemented as an extension method in .Net:
+```cs
+public static class EnumerableExtensions
+{
+    ...
+    public static IEnumerable<B> Select<A, B>(this IEnumerable<A> source, Func<A, B);
+    ...
+}
+```
+
+#### Functor laws
+
+##### Identity
+
+The identity law states that if you map the identity function over the functor, it is the same as the result of using the identity function on the functor:
+```hs
+fmap id == id
+```
+
+---
+
+```cs
+source.Select(x => x) == source
+```
+
+##### Composition
+
+The composition law states that two consecutive mapping operations, `f` and `g`, is the same as one mapping operation where the mapping operation is the composed function `h = f . g`:
+
+```hs
+fmap (f . g) == fmap f . fmap g
+```
+
+---
+
+```cs
+source.Select(x => F(x)).Select(x => G(x)) == source.Select(x => G(F(x))
+```
+
+#### Functor examples
+
+##### Identity
+
+**Identity** is a wrapping structure in **Haskell** and can be implemented as:
+```hs
+newtype Identity a = Identity a
+```
+
+**Identity** can implement the Functor type class as:
+```hs
+instance Functor Identity where
+  fmap f (Identity x) = Identity (f x)
+```
+
+The proofs for the functor laws are trivial:
+```hs
+-- Identity, LHS
+  fmap id (Identity x)                [Definition of fmap]
+= Identity (id x)                     [Definition of id]
+= Identity x
+
+-- Identity, RHS
+  id (Identity x)                     [Definition of id]
+= Identity x
+
+-- Composition, LHS
+  fmap (f . g) (Identity x)           [Definition of fmap]
+= Identity ((f . g) x)                [Definition of (.)]
+= Identity (f (g x))
+
+-- Composition, RHS
+  (fmap f . fmap g) (Identity x)      [Definition of (.)]
+= fmap f (fmap g (Identity x))        [Definition of fmap]
+= fmap f (Identity (g x))             [Definition of fmap]
+= Identity (f (g x))
+```
+
+##### Maybe
+
+**Maybe** is a structure which is either empty (`Nothing`) or containing a value (`Just x`). It is defined in **Haskell** as:
+```hs
+data Maybe a = Nothing | Just a
+```
+
+Functor for **Maybe** is implemented as:
+```hs
+instance Functor Maybe where
+  fmap f Nothing  = Nothing
+  fmap f (Just x) = Just (f x)
+```
+
+Proofs that the implementation of Functor for **Maybe** abides the Functor laws are left as an exercise.
+
+##### Either
+
+**Either** is a structure containing one of two values: `Right x` or `Left y`. It is defined in **Haskell** as:
+```hs
+data Either e a = Left e | Right a
+```
+
+Functor for **Either e** (notice that we have to partially apply the first type argument to `Either`) is implemented as:
+```hs
+instance Functor (Either e) where
+  fmap f (Left y)  = Left y
+  fmap f (Right x) = Right (f x)
+```
+
+Proofs that the implementation of Functor for **Either e** abides the Functor laws are left as an exercise.
 
 Applicative functors
 ====================
