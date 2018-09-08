@@ -49,7 +49,7 @@ maximumMono (x:xs) = f x xs
 
 {-
 Implement the polymorphic version of maximum
-Hint: Use maximumMono as starting and use compare from the
+Hint: Use maximumMono as a starting point and use compare from the
 Ord type class.
 -}
 maximumPoly :: Ord a => [a] -> a
