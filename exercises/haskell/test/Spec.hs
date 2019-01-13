@@ -1,3 +1,4 @@
+import qualified FunctorSpec as Functor
 import qualified MonoidSpec as Monoid
 import qualified PolymorphismSpec as Polymorphism
 
@@ -41,3 +42,10 @@ main = hspec $ do
     it "prop_ListAssociative" $ property Monoid.prop_ListAssociative
     it "prop_ListLeftIdentity" $ property Monoid.prop_ListLeftIdentity
     it "prop_ListRightIdentity" $ property Monoid.prop_ListRightIdentity
+  describe "Functors" $ do
+    it "prop_IdentityTypeUpholdsIdenityLaw" $ property Functor.prop_IdentityTypeUpholdsIdenityLaw
+    it "prop_IdentityTypeUpholdsCompositionLaw" $ property Functor.prop_IdentityTypeUpholdsCompositionLaw
+    it "prop_MaybeTypeUpholdsIdentityLaw" $ property Functor.prop_MaybeTypeUpholdsIdentityLaw
+    it "prop_MaybeTypeUpholdsCompositionLaw" $ property Functor.prop_MaybeTypeUpholdsCompositionLaw
+    it "prop_EitherTypeUpholdsIdentityLaw" $ property Functor.prop_EitherTypeUpholdsIdentityLaw
+    it "prop_EitherTypeUpholdsCompositionLaw" $ property Functor.prop_EitherTypeUpholdsCompositionLaw
