@@ -484,7 +484,7 @@ If we add an internal state which changes when we call `fmap` we can create a da
 data Identity a = Identity Int a
 
 instance Functor (Identity a) where
-  fmap f (Identity n x) = Identity (n+1) (f x)
+  fmap f (Identity n x) = Identity (n + 1) (f x)
 ```
 
 Now when we try to apply the proofs for the functor laws we can see that they are not uphold:
