@@ -384,7 +384,7 @@ public static class EnumerableExtensions
 
 The identity law states that if you map the identity function over the functor, it is the same as the result of using the identity function on the functor:
 ```hs
-fmap id == id
+fmap id x == id x
 ```
 
 ---
@@ -398,13 +398,13 @@ source.Select(x => x) == source
 The composition law states that two consecutive mapping operations, `f` and `g`, is the same as one mapping operation where the mapping operation is the composed function `h = f . g`:
 
 ```hs
-fmap (f . g) == fmap f . fmap g
+fmap (f . g) x == (fmap f . fmap g) x
 ```
 
 ---
 
 ```cs
-source.Select(x => F(x)).Select(x => G(x)) == source.Select(x => G(F(x))
+source.Select(x => G(x)).Select(x => F(x)) == source.Select(x => F(G(x))
 ```
 
 #### Functor examples
@@ -476,6 +476,47 @@ instance Functor (Either e) where
 ```
 
 Proofs that the implementation of Functor for **Either e** abides the Functor laws are left as an exercise.
+
+#### Non-functor example
+
+If we add an internal state which changes when we call `fmap` we can create a datatype which very much resembles a functor but isn't one:
+```hs
+data Identity a = Identity Int a
+
+instance Functor (Identity a) where
+  fmap f (Identity n x) = Identity (n+1) (f x)
+```
+
+Now when we try to apply the proofs for the functor laws we can see that they are not uphold:
+```hs
+-- Identity, LHS
+  fmap id (Identity n x)              [Definition of fmap]
+= Identity (n + 1) (id x)             [Definition of id]
+= Identity (n + 1) x
+
+-- Identity, RHS
+  id (Identity n x)                   [Definition of id]
+= Identity n x
+
+-- Composition, LHS
+  fmap (f . g) (Identity n x)         [Definition of fmap]
+= Identity (n + 1) ((f . g) x)        [Definition of (.)]
+= Identity (n + 1) (f (g x))
+
+-- Composition, RHS
+  (fmap f . fmap g) (Identity n x)    [Definition of (.)]
+= fmap f (fmap g (Identity n x))      [Definition of fmap]
+= fmap f (Identity (n + 1) (g x))     [Definition of fmap]
+= Identity (n + 2) (f (g x))
+```
+
+We see that the internal state is different in LHS and RHS.
+
+#### Real-world examples
+
+ * **C\#**: `IEnumerable<T>` is the standard canonical example of a functor in **C\#** but also types such as `Nullable<T>` and `Task<T>` can be thought of as functors.
+ * **F\#**: `Option<'a>`, `Result<'e, 'a>`, `list<'a>`, `seq<'a>`.
+ * **JavaScript**: It is hard to reason about functors in **JavaScript** because of its dynamic nature but `Promise<a>` follows the pattern with `then`.
 
 Applicative functors
 ====================
