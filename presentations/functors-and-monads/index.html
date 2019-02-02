@@ -1,0 +1,200 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Functors and Monads</title>
+
+		<link rel="stylesheet" href="../css/reveal.css">
+		<link rel="stylesheet" href="../css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="../lib/css/zenburn.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h2>Functors and Monads</h2>
+					<p>Eric Bergqvist</p>
+				</section>
+				<section>
+					<h1>Repetition</h1>
+					<section>
+						<p class="fragment" data-fragment-index="0">Parametric polymorphism</p>
+						<pre class="fragment" data-fragment-index="1">
+							<code data-trim data-noescape>
+f1 :: a -> a
+f1 x = ?
+							</code>
+						</pre>
+						<pre class="fragment" data-fragment-index="2">
+							<code data-trim data-noescape>
+f2 :: Int -> Int
+f2 x = ?
+							</code>
+						</pre>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="3">
+							The less we now about the type, the more we know about the implementation
+						</p>
+					</section>
+					<section>
+						<p class="fragment" data-fragment-index="0">Different kinds of type</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="1">
+							Simple, concrete:
+							<pre class="fragment" data-fragment-index="1"><code data-trim data-noescape>Int, Double, String</code></pre>
+						</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="2">
+							Simple, polymorphic:
+							<pre class="fragment" data-fragment-index="2"><code data-trim data-noescape>a, b, c, T, U, V</code></pre>
+						</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="3">
+							Container, concrete:
+							<pre class="fragment" data-fragment-index="3"><code data-trim data-noescape>[Int], [a], Map k v</code></pre>
+						</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="4">
+							Container, polymorphic:
+							<pre class="fragment" data-fragment-index="4"><code data-trim data-noescape>f a, m a</code></pre>
+						</p>
+					</section>
+					<section>
+						<p class="fragment" data-fragment-index="0">Contraints on the higher-kinded type</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="1">
+							Map, Haskell:
+							<pre class="fragment" data-fragment-index="1"><code data-trim data-noescape>fmap :: (a -> b) -> f a -> f b</code></pre>
+						</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="2">
+							Select, C#:
+							<pre class="fragment" data-fragment-index="2"><code data-trim data-noescape>
+public static IEnumerable&lt;T2&gt; Select&lt;T1, T2&gt;(
+	this IEnumerable&lt;T1&gt; source,
+	Func&lt;T1, T2&gt; f);
+								</code></pre>
+						</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="3">
+							Select, C# (if C# had higher-kinded types)?:
+							<pre class="fragment" data-fragment-index="3"><code data-trim data-noescape>
+public static F&lt;T2&gt; Select&lt;T1, T2&gt;(
+	this F&lt;T1&gt; source,
+	Func&lt;T1, T2&gt; f);
+								</code></pre>
+						</p>
+					</section>
+				</section>
+				<section>
+					<h1>Functors</h1>
+					<section>
+						<p>What are functors?</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="0">A technical programming approach (Haskell):</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="0">A functor is a class of types implementing the function <i>fmap</i>:</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="0">
+							<pre class="fragment" data-fragment-index="0"><code data-trim data-noescape>
+instance Functor f where
+  {-# MINIMAL fmap #-}
+  fmap :: (a -> b) -> f a -> f b
+  (&lt;$) :: a -> f b -> f a
+								</code></pre>
+						</p>
+					</section>
+					<section>
+						<p>Functor laws</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="0">Identity</p>
+						<p style="font-size: 40%" class="fragment" data-fragment-index="0">
+							<pre class="fragment" data-fragment-index="0"><code data-trim data-noescape>fmap id x = id x</code></pre>
+						</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="1">Composition</p>
+						<p style="font-size: 40%" class="fragment" data-fragment-index="1">
+							<pre class="fragment" data-fragment-index="1"><code data-trim data-noescape>fmap (f . g) x = (fmap f . fmap g) x</code></pre>
+						</p>
+					</section>
+					<section>
+						<h2>Demo</h2>
+					</section>
+				</section>
+				<section>
+					<h1>Monads</h1>
+					<section>
+						<p class="fragment" data-fragment-index="0">Why monads?</p>
+						<p class="fragment" data-fragment-index="1"><b>To encapsulate side-effects:</b></p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="2">Database calls</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="3">Error handling</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="4">HTTP requests</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="5">Logging</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="6">Async workflows</p>
+					</section>
+					<section>
+						<p class="fragment" data-fragment-index="0">Examples:</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="1">C#: LINQ, Task&lt;T&gt;, async/await</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="2">F#: Computational expressions (Async, Result, Option)</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="3">JavaScript: Task, Promise (with one caveat)</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="4">Haskell: Identity, Maybe, Either, State, Reader, IO</p>
+					</section>
+					<section>
+						<p>What are monads?</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="0">A category theory approach:</p>
+						<p style="font-size: 40%" class="fragment" data-fragment-index="0"><i>A monad is just a monoid in the category of endofunctors</i></p>
+					</section>
+					<section>
+						<p>What are monads?</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="0">A technical programming approach (Haskell):</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="0">A monad is a class of types implementing the functions <i>return</i> and <i>bind</i> (>>=):</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="0">
+							<pre class="fragment" data-fragment-index="0"><code data-trim data-noescape>
+instance Monad m where
+  {-# MINIMAL return, (>>=) #-}
+  (>>=)  :: m a -> (a -> m b) -> m b
+  (>>)   :: m a -> m b -> m b
+  return :: a -> m a
+  fail   :: String -> m a
+								</code></pre>
+						</p>
+					</section>
+					<section>
+						<p>What are monads?</p>
+						<p style="font-size: 70%" class="fragment" data-fragment-index="0">An analogy approach</p>
+						<p style="font-size: 50%" class="fragment" data-fragment-index="1"><i>Monads are like burritos</i></p>
+						<p style="font-size: 30%" class="fragment" data-fragment-index="1"><a href="https://blog.plover.com/prog/burritos.html">https://blog.plover.com/prog/burritos.html</a></p>
+						<p style="font-size: 50%" class="fragment" data-fragment-index="2"><i>Monads are like boxes</i></p>
+						<p style="font-size: 30%" class="fragment" data-fragment-index="2"><a href="http://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html">http://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html</a></p>
+					</section>
+					<section>
+						<p>Monad laws</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="0">Left identity</p>
+						<p style="font-size: 40%" class="fragment" data-fragment-index="0">
+							<pre class="fragment" data-fragment-index="0"><code data-trim data-noescape>return a >>= f = f a</code></pre>
+						</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="1">Right identity</p>
+						<p style="font-size: 40%" class="fragment" data-fragment-index="1">
+							<pre class="fragment" data-fragment-index="1"><code data-trim data-noescape>m >>= return = m</code></pre>
+						</p>
+						<p style="font-size: 60%" class="fragment" data-fragment-index="2">Associativity</p>
+						<p style="font-size: 40%" class="fragment" data-fragment-index="2">
+							<pre class="fragment" data-fragment-index="2"><code data-trim data-noescape>(m >>= f) >>= g = m >>= (\x -> f x >>= g)</code></pre>
+						</p>
+					</section>
+					<section>
+						<h2>Demo</h2>
+					</section>
+				</section>
+			</div>
+		</div>
+
+		<script src="../lib/js/head.min.js"></script>
+		<script src="../js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: '../plugin/markdown/marked.js' },
+					{ src: '../plugin/markdown/markdown.js' },
+					{ src: '../plugin/notes/notes.js', async: true },
+					{ src: '../plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
